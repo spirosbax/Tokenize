@@ -1,0 +1,36 @@
+.create {
+    display: flex;
+    flex-flow: row wrap;
+
+    background-color: #912f40;
+}
+
+form {
+    text-align: left;
+}
+
+label {
+    font-size: 12px;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+#forms{
+    margin: 10px;
+    flex: 1 0 auto;
+}
+
+#forms, #text {
+    color: #40434e;
+    background-color: #fffffa;
+}
+
+.type {
+    margin-bottom: 15px;
+}
+
+#text {
+    margin: 10px;
+    /* flex: 0 1 50%; */
+    text-align: left;
+}

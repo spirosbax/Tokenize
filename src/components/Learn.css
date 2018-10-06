@@ -1,0 +1,42 @@
+.learn-definition {
+    display: flex;
+    flex-direction: column;
+
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: x-large;
+
+    color: #fffffa;
+    background-color: #080705;
+}
+
+.definition {
+    padding: calc(var(--main-app-body-height)/3);
+    color: #fffffa;
+}
+
+.definition-link {
+    font-size: medium;
+    padding-bottom: 20px;
+}
+
+.learn-tokens {
+    display: flex;
+
+    font-family: 'Roboto', sans-serif;
+    text-align: left;
+
+    background-color: #702632;
+}
+
+.card-head {
+    text-align: center;
+    font-weight: bold;
+    font-size: x-large;
+}
+
+#erc20, #erc223, #erc721, #erc777 {
+    margin: 15px;
+    background-color: #fffffa;
+    font-size: medium;
+    color: #40434e;
+}
