@@ -10,16 +10,15 @@ import FormGroup from '@material-ui/core/FormGroup'
 import './Create.css'
 
 import ConditionalInput from './ConditionalInput.js'
-import erc20 from '../solidity/contracts/ERC20.sol'
-import erc20Interface from '../solidity/contracts/ERC20Interface.sol'
-import safeMath from '../solidity/libraries/SafeMath.sol'
+import erc20ABI from '../solidity/contracts/ERC20ABI.json'
+import erc20Bytecode from '../solidity/contracts/ERC20Bytecode.json'
 
 const Web3 = require('web3')
 var web3
 var netId
 
-const solcWrapper = require('solc/wrapper')
-const solc = solcWrapper(window.Module)
+// const solcWrapper = require('solc/wrapper')
+// const solc = solcWrapper(window.Module)
 
 var netIdtoName = {
     1: "mainnet",
@@ -27,11 +26,6 @@ var netIdtoName = {
     3: "ropsten",
     4: "rinkeby",
     42: "kovan"
-}
-var input = {
-    "ERC20.sol": erc20,
-    "ERC20Interface.sol": erc20Interface,
-    "SafeMath.sol": safeMath
 }
 
 const options = [
@@ -113,14 +107,14 @@ class Create extends Component {
     launchContract() {
         this.validateParameters()
 
-        const compiled = solc.compile({sources: input}, 1)
-        var erc20Compiled = compiled.contracts["ERC20.sol:ERC20"]
-        var erc20ABI = JSON.parse(erc20Compiled.interface)
+//         var erc20ABI = JSON.parse(erc20Compiled.interface)
+//         var erc20Bytecode = JSON.parse(erc20Compiled)
+        console.log(erc20ABI,"0x"+erc20Bytecode.object)
         var erc20Contract = new web3.eth.Contract(erc20ABI)
 
 
         erc20Contract.deploy({
-            data: erc20Compiled.bytecode,
+            data: "0x"+erc20Bytecode.object,
             arguments: [this.state.founderOption ? this.state.founderAddress : this.state.defaultFounderAddress,
                         this.state.tokenName,
                         this.state.tokenSymbol,
