@@ -8,7 +8,6 @@ import Switch from '@material-ui/core/Switch'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormGroup from '@material-ui/core/FormGroup'
 import './Create.css'
-
 import ConditionalInput from './ConditionalInput.js'
 import erc20ABI from '../solidity/contracts/ERC20ABI.json'
 import erc20Bytecode from '../solidity/contracts/ERC20Bytecode.json'
@@ -16,9 +15,6 @@ import erc20Bytecode from '../solidity/contracts/ERC20Bytecode.json'
 const Web3 = require('web3')
 var web3
 var netId
-
-// const solcWrapper = require('solc/wrapper')
-// const solc = solcWrapper(window.Module)
 
 var netIdtoName = {
     1: "mainnet",
@@ -46,11 +42,12 @@ class Create extends Component {
             tokenSelectedType: null,
             founderOption: false,
             founderAddress: "",
-            defaultFounderAddress: ""
+            defaultFounderAddress: "",
+            hasErrors: false
         }
         this.launchContract = this.launchContract.bind(this)
-        this.validateParameters = this.validateParameters.bind(this)
         this.founderChange = this.founderChange.bind(this)
+        this.validateParameters = this.validateParameters.bind(this)
     }
 
     componentDidMount() {
@@ -86,7 +83,6 @@ class Create extends Component {
         })
     }
 
-
     acknowlegdeNetwork() {
         web3.eth.net.getId()
         .then((netid) => {
@@ -105,10 +101,6 @@ class Create extends Component {
     }
 
     launchContract() {
-        this.validateParameters()
-
-//         var erc20ABI = JSON.parse(erc20Compiled.interface)
-//         var erc20Bytecode = JSON.parse(erc20Compiled)
         console.log(erc20ABI,"0x"+erc20Bytecode.object)
         var erc20Contract = new web3.eth.Contract(erc20ABI)
 
@@ -142,29 +134,37 @@ class Create extends Component {
     }
 
     validateParameters(){
-        console.log(this.state)
+        if((this.state.tokenSelectedType === null) || (this.state.tokenName === "") || (this.state.tokenDecimals === null) || (this.state.tokenTotalSupply === null) || (this.state.tokenSymbol === "") || ((this.state.founderOption) && (this.state.founderAddress === ""))){
+            return true
+        }else if(isNaN(this.state.tokenDecimals) || (isNaN(this.state.tokenTotalSupply))){
+            // console.log(!isNaN(this.state.tokenDecimals) || (!isNaN(this.state.tokenTotalSupply)))
+            // console.log(isNaN(this.state.tokenDecimals))
+            return true
+        }
+        return false
     }
 
     render() {
-        // console.log("isMobile: ", isMobile)
+        const disableLaunch = this.validateParameters()
+
         return (
             <div class="create">
                 <Card id="forms">
                     <CardContent>
                         <form>
                             <label for="type">Token Type</label>
-                            <Select className="type" value={this.state.tokenSelectedType} onChange={this.handleChange} options={options} />
+                            <Select value={this.state.tokenSelectedType} onChange={this.handleChange} options={options} />
                             <hr/>
 
                             <div className="form-group">
                                 <label for="name">Token Name</label>
                                 <input type="string" className="form-control" placeholder="eg. IonioCoin"
-                                value={this.state.tokenName} onChange={e => this.setState({ tokenName: e.target.value })} />
+                                value={this.state.tokenName} onChange={e => this.setState({ tokenName: e.target.value })}/>
                             </div>
 
                             <div className="form-group">
                                 <label for="decimals">Token Decimals</label>
-                                <input type="number" className="form-control" placeholder="eg. 18"
+                                <input className="form-control" placeholder="eg. 18"
                                 value={this.state.tokenDecimals} onChange={e => this.setState({ tokenDecimals: e.target.value })}/>
                             </div>
 
@@ -194,10 +194,9 @@ class Create extends Component {
 
                             <ConditionalInput founderOption={this.state.founderOption} founderChange={this.founderChange}/>
 
-                            <Button bsStyle="primary" onClick={this.launchContract}>
+                            <Button bsStyle="primary" onClick={this.launchContract} disabled={disableLaunch}>
                                 Launch Contract
                             </Button>
-
 
                         </form>
                     </CardContent>

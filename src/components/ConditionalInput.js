@@ -1,7 +1,6 @@
 import React from 'react'
 
 const ConditionalInput = (props) => {
-    console.log(props)
     if(props.founderOption) {
         return (
             <div className="form-group">
