@@ -16,6 +16,7 @@ const Web3 = require('web3')
 var web3
 var netId
 
+// Use this object to match network ids with network names
 var netIdtoName = {
     1: "mainnet",
     2: "morden",
@@ -24,6 +25,7 @@ var netIdtoName = {
     42: "kovan"
 }
 
+// Select options
 const options = [
   { value: 'ERC20', label: 'ERC20' },
   { value: 'ERC223', label: 'ERC223' },
@@ -45,14 +47,15 @@ class Create extends Component {
             defaultFounderAddress: "",
             hasErrors: false
         }
+        // binding this for function use
         this.launchContract = this.launchContract.bind(this)
         this.founderChange = this.founderChange.bind(this)
         this.validateParameters = this.validateParameters.bind(this)
     }
 
     componentDidMount() {
-        this.setUpWeb3()
-        this.acknowlegdeNetwork()
+        this.setUpWeb3() // set up web3 instance
+        this.acknowlegdeNetwork() // find out the current network's name
     }
 
     async setUpWeb3(){
